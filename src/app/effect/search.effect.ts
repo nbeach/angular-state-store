@@ -33,17 +33,17 @@ export class ActionHandlerThing {
 
   constructor(private store: StateStore<AppState>, private actions: Actions) {
     this.actions.subscribe(action => {
-      Array.from(this.handlers.entries()).forEach(([eventType, handlers]) => {
-        if (isAction(eventType, action)) {
+      Array.from(this.handlers.entries()).forEach(([actionType, handlers]) => {
+        if (isAction(actionType, action)) {
           handlers.forEach( handler => handler(action, this.store))
         }
       })
     })
   }
 
-  public registerHandler<T>(eventType: ActionFactory<T>, handler: ActionHandler<T>) {
-    const handlers = this.handlers.get(eventType) || []
-    this.handlers.set(eventType, [...handlers, handler])
+  public registerHandler<T>(actionType: ActionFactory<T>, handler: ActionHandler<T>) {
+    const handlers = this.handlers.get(actionType) || []
+    this.handlers.set(actionType, [...handlers, handler])
   }
 
 }

@@ -7,10 +7,10 @@ import {Action} from "../action/action"
 export class StateStore<T> {
   private readonly _state: BehaviorSubject<T>
 
-  constructor(private reducer: (priorState: T, action: Action<any>) => T, initialState: T, eventSource: Observable<Action<any>>) {
+  constructor(private reducer: (priorState: T, action: Action<any>) => T, initialState: T, actionSource: Observable<Action<any>>) {
     this._state = new BehaviorSubject<T>(initialState)
 
-    eventSource.subscribe(action => {
+    actionSource.subscribe(action => {
       const newState = this.reducer(this.stateSnapshot, action)
       this._state.next(newState)
     })
