@@ -1,4 +1,4 @@
-import {actionFactoryBuilder, ActionParameters} from "../../lib/action/action"
+import {actionFactoryBuilder, ActionParameters} from "../../lib/action"
 
 export interface SearchResultAction extends ActionParameters {
   readonly results: string[]

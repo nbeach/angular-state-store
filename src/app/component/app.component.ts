@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component} from "@angular/core"
-import {SearchActionReceiver} from "../receiver/search.action-receiver"
 
 @Component({
   selector: "app-root",
@@ -10,10 +9,4 @@ import {SearchActionReceiver} from "../receiver/search.action-receiver"
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-
-  // TODO: Figure out a better way to get this object created
-  constructor(effect: SearchActionReceiver) {
-  }
-
-}
+export class AppComponent { }

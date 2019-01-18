@@ -1,13 +1,12 @@
 import {Observable} from "rxjs/internal/Observable"
 import {BehaviorSubject} from "rxjs/internal/BehaviorSubject"
-import {Action, Actions} from "./action/action"
+import {Subject} from "rxjs"
 
+export class StateStore<S, A> {
+  private readonly _state: BehaviorSubject<S>
 
-export class StateStore<T> {
-  private readonly _state: BehaviorSubject<T>
-
-  constructor(private reducer: (priorState: T, action: Action<any>) => T, initialState: T, actionSource: Actions) {
-    this._state = new BehaviorSubject<T>(initialState)
+  constructor(private reducer: (priorState: S, action: A) => S, initialState: S, actionSource: Subject<A>) {
+    this._state = new BehaviorSubject<S>(initialState)
 
     actionSource.subscribe(action => {
       const newState = this.reducer(this.stateSnapshot, action)
@@ -15,11 +14,11 @@ export class StateStore<T> {
     })
   }
 
-  get state(): Observable<T> {
+  get state(): Observable<S> {
     return this._state.asObservable()
   }
 
-  get stateSnapshot(): T {
+  get stateSnapshot(): S {
     return this._state.getValue()
   }
 

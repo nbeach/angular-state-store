@@ -1,12 +1,17 @@
 import {BrowserModule} from "@angular/platform-browser"
-import {NgModule} from "@angular/core"
+import {Injector, NgModule, Type} from "@angular/core"
 import {AppComponent} from "./component/app.component"
 import {SearchComponent} from "./component/search.component"
 import {SearchResultComponent} from "./component/search-result.component"
 import {SearchActionReceiver} from "./receiver/search.action-receiver"
 import {SearchService} from "./service/search-service"
 import {AppActions, AppStateStore} from "./app.injectables"
+import {ActionReceiver, ActionReceiverModule} from "./lib/action-receiver"
 
+
+const receivers: Type<ActionReceiver>[] = [
+  SearchActionReceiver,
+]
 
 @NgModule({
   declarations: [
@@ -16,14 +21,13 @@ import {AppActions, AppStateStore} from "./app.injectables"
   ],
   imports: [
     BrowserModule,
+    ActionReceiverModule(receivers),
   ],
   providers: [
     AppActions,
     AppStateStore,
     SearchService,
-    SearchActionReceiver,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule { }

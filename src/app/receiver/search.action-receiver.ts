@@ -1,15 +1,16 @@
 import {Injectable} from "@angular/core"
 import {SearchAction, searchAction} from "../model/action/search.action"
-import {AbstractActionReceiver, Action, ReceivesActions} from "../lib/action/action"
 import {SearchResultAction, searchResultAction} from "../model/action/search-result.action"
 import {SearchService} from "../service/search-service"
 import {map} from "rxjs/operators"
 import {Observable} from "rxjs"
 import {AppActions, AppStateStore} from "../app.injectables"
+import {Action} from "../lib/action"
+import {ActionReceiver, ReceivesActions} from "../lib/action-receiver"
 
 
 @Injectable()
-export class SearchActionReceiver extends AbstractActionReceiver {
+export class SearchActionReceiver extends ActionReceiver {
 
   constructor(actions: AppActions, private store: AppStateStore, private searchService: SearchService) {
     super(actions)
