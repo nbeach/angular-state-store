@@ -1,26 +1,26 @@
 import {ChangeDetectionStrategy, Component} from "@angular/core"
-import {StateStore} from "../modules/state-store/store"
-import {AppState} from "../model/state/app.state"
 import {Observable} from "rxjs"
 import {searchAction} from "../model/action/search.action"
 import {map} from "rxjs/operators"
 import {queryChangedAction} from "../model/action/query-change.action"
-import {Actions} from "../modules/action/action"
+import {AppActions, AppStateStore} from "../app.injectables"
 
 @Component({
   selector: "search",
   template: `
-    <h1>Search</h1>
-    <p>Current search is {{query | async}}</p>
-    <input [value]="query | async" (keyup)="queryChange($event.target.value)">
-    <button (click)="search()">Search</button>
+    <div>
+      <h1>Search:</h1>
+      <input [value]="query | async" (keyup)="queryChange($event.target.value)">
+      <button (click)="search()">Search</button>
+      <p>Current search is {{query | async}}</p>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent {
   public query: Observable<string>
 
-  constructor(private store: StateStore<AppState>, private actions: Actions) {
+  constructor(private store: AppStateStore, private actions: AppActions) {
     this.query = store.state.pipe(map(state => state.query))
   }
 

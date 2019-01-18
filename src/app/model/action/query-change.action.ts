@@ -1,4 +1,4 @@
-import {actionFactoryBuilder} from "../../modules/action/action"
+import {actionFactoryBuilder} from "../../lib/action/action"
 
 export interface QueryChangedAction {
   readonly query: string

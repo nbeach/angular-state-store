@@ -1,6 +1,6 @@
-import {actionFactoryBuilder} from "../../modules/action/action"
+import {actionFactoryBuilder, ActionParameters} from "../../lib/action/action"
 
-export interface SearchAction {
+export interface SearchAction extends ActionParameters {
 }
 
 export const searchAction = actionFactoryBuilder<SearchAction>()

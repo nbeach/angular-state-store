@@ -1,11 +1,14 @@
 import {isObservable, Observable, Subject} from "rxjs"
-import {isFunction, isUndefined} from "lodash"
+import {isFunction, isUndefined, negate} from "lodash"
 
 export interface ActionType {
   readonly __type: symbol
 }
 
-export type Action<T> = ActionType & T
+export interface ActionParameters {
+}
+
+export type Action<T extends ActionParameters> = ActionType & T
 
 export interface ActionFactory<T> {
   (action: T): Action<T>
@@ -24,40 +27,40 @@ export function isAction<T>(factory: ActionFactory<T>, action: Action<any>): act
   return (action as any).__type === factory.__type
 }
 
-export class Actions extends Subject<Action<any>> {
+export class Actions extends Subject<Action<ActionParameters>> {
 }
 
+type ActionResult = Observable<Action<any>> | Observable<Action<any>>[] | Action<any> | Action<any> | undefined
 
 export interface ActionReceiver<T> {
-  (action: Action<T>): Observable<Action<any>> | Action<any> | undefined
+  (action: Action<T>): ActionResult
 
   __eventTypes: ActionFactory<any>[]
 }
 
 export class AbstractActionReceiver {
+  private actionReceivers: ActionReceiver<any>[]
 
   constructor(private actions: Actions) {
+    this.actionReceivers = values(this).filter(isActionReceiver)
+
     actions.subscribe(this.dispatchActions)
   }
 
   private dispatchActions = (action: Action<any>) => {
-
-    const results = values(this)
-      .filter(isActionReceiver)
+    const actionsResults = this.actionReceivers
       .filter(receivesAction(action))
-      .map(receiver => receiver.call(this, action))
-      .filter(action => !isUndefined(action))
+      .map(receiver => receiver.call(this, action) as ActionResult)
+      .flat()
+      .filter(negate(isUndefined))
 
-
-    results
+    actionsResults
       .filter(isActionType)
       .forEach(this.dispatchAction)
 
-    results
+    actionsResults
       .filter(isObservable)
-      .forEach(result => {
-        result.subscribe(this.dispatchAction)
-      })
+      .forEach((result: Observable<Action<any>>) => result.subscribe(this.dispatchAction))
   }
 
   private dispatchAction = (action: Action<any>) => {
@@ -74,7 +77,7 @@ function values(obj: any): any[] {
   return values
 }
 
-export function ReceivesEvents(types: ActionFactory<any>[]) {
+export function ReceivesActions(types: ActionFactory<any>[]) {
   return function(target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
     descriptor.value.__eventTypes = types
     return descriptor
@@ -85,10 +88,10 @@ const isActionReceiver = (value: any): boolean => {
   return isFunction(value) && !isUndefined((value as any).__eventTypes)
 }
 
-function isActionType(value: any ): value is Action<any> {
+function isActionType(value: any): value is Action<any> {
   return !isUndefined(value.__type)
 }
 
 const receivesAction = (action: Action<any>): (receiver: ActionReceiver<any>) => boolean => {
-  return (receiver: ActionReceiver<any>) => receiver.__eventTypes.some((type: ActionFactory<any>) => isAction(type, action))
+  return (receiver: ActionReceiver<any>) => receiver.__eventTypes.some(type => isAction(type, action))
 }

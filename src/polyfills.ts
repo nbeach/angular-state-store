@@ -31,7 +31,12 @@
 // import 'core-js/es6/math';
 // import 'core-js/es6/string';
 // import 'core-js/es6/date';
-// import 'core-js/es6/array';
+import "core-js/es6/array"
+import "core-js/es7/array"
+/***************************************************************************************************
+ * Zone JS is required by default for Angular itself.
+ */
+import "zone.js/dist/zone" // Included with Angular CLI.
 // import 'core-js/es6/regexp';
 // import 'core-js/es6/map';
 // import 'core-js/es6/weak-map';
@@ -73,11 +78,6 @@
  *  (window as any).__Zone_enable_cross_context_check = true;
  *
  */
-
-/***************************************************************************************************
- * Zone JS is required by default for Angular itself.
- */
-import 'zone.js/dist/zone' // Included with Angular CLI.
 
 
 /***************************************************************************************************

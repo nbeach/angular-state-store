@@ -2,7 +2,11 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "strict": true
+    "strict": true,
+    "lib": [
+      "dom",
+      "esnext"
+    ]
   },
   "exclude": [
     "test.ts",
