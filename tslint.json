@@ -20,6 +20,8 @@
     "one-variable-per-declaration": false,
     "object-literal-sort-keys": false,
     "no-var-requires": false,
-    "indent": [true, "spaces", 4]
+    "indent": [true, "spaces", 4],
+    "only-arrow-functions": false,
+    "no-empty-interface": false
   }
 }

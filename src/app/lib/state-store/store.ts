@@ -1,13 +1,16 @@
-import {Injectable} from "@angular/core"
+import {Inject, Injectable} from "@angular/core"
 import {Observable} from "rxjs/internal/Observable"
 import {BehaviorSubject} from "rxjs/internal/BehaviorSubject"
-import {Action} from "../action/action"
+import {Action, Actions} from "../action/action"
+
+export const ROOT_REDUCER = Symbol()
+export const INITIAL_STATE = Symbol()
 
 @Injectable()
 export class StateStore<T> {
   private readonly _state: BehaviorSubject<T>
 
-  constructor(private reducer: (priorState: T, action: Action<any>) => T, initialState: T, actionSource: Observable<Action<any>>) {
+  constructor(@Inject(ROOT_REDUCER) private reducer: (priorState: T, action: Action<any>) => T, @Inject(INITIAL_STATE) initialState: T, actionSource: Actions) {
     this._state = new BehaviorSubject<T>(initialState)
 
     actionSource.subscribe(action => {

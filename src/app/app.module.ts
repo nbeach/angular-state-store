@@ -1,10 +1,13 @@
 import {BrowserModule} from "@angular/platform-browser"
 import {NgModule} from "@angular/core"
 import {AppComponent} from "./component/app.component"
-import {StoreModule} from "./store/store.module"
 import {SearchComponent} from "./component/search.component"
 import {SearchResultComponent} from "./component/search-result.component"
-import {SearchEffects} from "./effect/search.effect"
+import {SearchActionReceiver} from "./receiver/search.action-receiver";
+import {rootReducer} from "./reducer/root.reducer";
+import {initialState} from "./reducer/initial-state";
+import {INITIAL_STATE, ROOT_REDUCER} from "./lib/state-store/store";
+import {StoreModule} from "./lib/state-store/store.module";
 
 
 @NgModule({
@@ -18,7 +21,9 @@ import {SearchEffects} from "./effect/search.effect"
     StoreModule,
   ],
   providers: [
-    SearchEffects,
+    SearchActionReceiver,
+    {provide: ROOT_REDUCER, useValue: rootReducer},
+    {provide: INITIAL_STATE, useValue: initialState},
   ],
   bootstrap: [AppComponent],
 })

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from "@angular/core"
-import {SearchEffects} from "../effect/search.effect"
+import {SearchActionReceiver} from "../receiver/search.action-receiver";
 
 @Component({
   selector: "app-root",
@@ -11,7 +11,7 @@ import {SearchEffects} from "../effect/search.effect"
 })
 export class AppComponent {
 
-  constructor(effect: SearchEffects) {
+  constructor(effect: SearchActionReceiver) {
   }
 
 }

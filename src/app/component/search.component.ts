@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component} from "@angular/core"
-import {StateStore} from "../store/store"
+import {StateStore} from "../lib/state-store/store"
 import {AppState} from "../model/state/app.state"
 import {Observable} from "rxjs"
-import {searchAction} from "../action/search/search.action"
+import {searchAction} from "../model/action/search.action"
 import {map} from "rxjs/operators"
-import {queryChangedAction} from "../action/search/query-change.action"
-import {Actions} from "../action/action"
+import {queryChangedAction} from "../model/action/query-change.action"
+import {Actions} from "../lib/action/action"
 
 @Component({
   selector: "search",

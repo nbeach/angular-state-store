@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from "@angular/core"
-import {StateStore} from "../store/store"
+import {StateStore} from "../lib/state-store/store"
 import {AppState} from "../model/state/app.state"
 import {Observable} from "rxjs"
 import {map} from "rxjs/operators"

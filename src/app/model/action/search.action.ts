@@ -1,4 +1,4 @@
-import {actionFactoryBuilder} from "../action"
+import {actionFactoryBuilder} from "../../lib/action/action"
 
 export interface SearchAction {
 }
