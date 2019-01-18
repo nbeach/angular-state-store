@@ -1,3 +1,4 @@
 export interface AppState {
-  readonly foo: string
+  readonly query: string
+  readonly results: string[]
 }
