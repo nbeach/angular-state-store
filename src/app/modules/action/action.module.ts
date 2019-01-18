@@ -6,3 +6,5 @@ import {Actions} from "./action"
 })
 export class ActionModule {
 }
+
+// TODO: Figure out a way to get this module to automatically instantiate allinjectable ActionReceivers?

@@ -3,8 +3,8 @@ import {Observable} from "rxjs/internal/Observable"
 import {BehaviorSubject} from "rxjs/internal/BehaviorSubject"
 import {Action, Actions} from "../action/action"
 
-export const ROOT_REDUCER = Symbol()
-export const INITIAL_STATE = Symbol()
+export const ROOT_REDUCER = "ROOT_REDUCER"
+export const INITIAL_STATE = "INITIAL_STATE"
 
 @Injectable()
 export class StateStore<T> {

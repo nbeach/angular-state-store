@@ -31,7 +31,7 @@ export class Actions extends Subject<Action<any>> {
 export interface ActionReceiver<T> {
   (action: Action<T>): Observable<Action<any>> | Action<any> | undefined
 
-  __types: ActionFactory<any>[]
+  __eventTypes: ActionFactory<any>[]
 }
 
 export class AbstractActionReceiver {
@@ -41,15 +41,16 @@ export class AbstractActionReceiver {
   }
 
   private dispatchActions = (action: Action<any>) => {
-    const results = Object.values(this)
+
+    const results = values(this)
       .filter(isActionReceiver)
       .filter(receivesAction(action))
-      .map(receiver => receiver(action))
+      .map(receiver => receiver.call(this, action))
       .filter(action => !isUndefined(action))
 
 
     results
-    // .filter(isActionType)
+      .filter(isActionType)
       .forEach(this.dispatchAction)
 
     results
@@ -65,17 +66,29 @@ export class AbstractActionReceiver {
 
 }
 
+function values(obj: any): any[] {
+  const values = []
+  for (const key in obj) {
+    values.push(obj[key])
+  }
+  return values
+}
+
 export function ReceivesEvents(types: ActionFactory<any>[]) {
-  return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+  return function(target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
     descriptor.value.__eventTypes = types
     return descriptor
   }
 }
 
 const isActionReceiver = (value: any): boolean => {
-  return isFunction(value) && !isUndefined((value as any).__types)
+  return isFunction(value) && !isUndefined((value as any).__eventTypes)
+}
+
+function isActionType(value: any ): value is Action<any> {
+  return !isUndefined(value.__type)
 }
 
 const receivesAction = (action: Action<any>): (receiver: ActionReceiver<any>) => boolean => {
-  return (receiver: ActionReceiver<any>) => receiver.__types.some((type: ActionFactory<any>) => isAction(type, action))
+  return (receiver: ActionReceiver<any>) => receiver.__eventTypes.some((type: ActionFactory<any>) => isAction(type, action))
 }

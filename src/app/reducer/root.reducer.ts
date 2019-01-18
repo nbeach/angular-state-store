@@ -1,4 +1,4 @@
-import {Action, isAction} from "../lib/action/action"
+import {Action, isAction} from "../modules/action/action"
 import {AppState} from "../model/state/app.state"
 import {searchResultAction} from "../model/action/search-result.action"
 import {queryChangedAction} from "../model/action/query-change.action"
