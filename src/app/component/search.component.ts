@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from "@angular/core"
 import {Observable} from "rxjs"
-import {searchAction} from "../model/action/search.action"
+import {querySearchAction} from "../model/action/query-search.action"
 import {map} from "rxjs/operators"
 import {queryChangedAction} from "../model/action/query-change.action"
 import {AppActions, AppStateStore} from "../app.injectables"
@@ -25,7 +25,7 @@ export class SearchComponent {
   }
 
   public search() {
-    this.actions.next(searchAction({}))
+    this.actions.next(querySearchAction({}))
   }
 
   public queryChange(query: string) {

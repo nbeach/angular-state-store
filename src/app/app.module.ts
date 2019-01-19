@@ -7,6 +7,7 @@ import {SearchActionReceiver} from "./receiver/search.action-receiver"
 import {SearchService} from "./service/search-service"
 import {AppActions, AppStateStore} from "./app.injectables"
 import {ActionReceiver, ActionReceiverModule} from "./lib/action-receiver"
+import {MakeFilterComponent} from "./component/make-filter.component"
 
 
 const receivers: Type<ActionReceiver>[] = [
@@ -18,6 +19,7 @@ const receivers: Type<ActionReceiver>[] = [
     AppComponent,
     SearchComponent,
     SearchResultComponent,
+    MakeFilterComponent,
   ],
   imports: [
     BrowserModule,

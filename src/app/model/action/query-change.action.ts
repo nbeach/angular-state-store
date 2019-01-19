@@ -1,6 +1,6 @@
 import {actionFactoryBuilder, ActionParameters} from "../../lib/action"
 
-export interface QueryChangedAction extends ActionParameters{
+export interface QueryChangedAction extends ActionParameters {
   readonly query: string
 }
 

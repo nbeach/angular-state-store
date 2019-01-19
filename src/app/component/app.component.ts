@@ -5,6 +5,8 @@ import {ChangeDetectionStrategy, Component} from "@angular/core"
   template: `
     <search></search>
     <br>
+    <make-filter></make-filter>
+    <br>
     <search-result></search-result>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

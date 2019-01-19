@@ -11,7 +11,7 @@ interface ActionReceiverMethod<T extends ActionParameters> {
   __eventTypes: ActionFactory<T>[]
 }
 
-export function ReceivesActions(types: ActionFactory<ActionParameters>[]) {
+export function ReceivesActions(types: ActionFactory<any>[]) {
   return function(target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
     descriptor.value.__eventTypes = types
     return descriptor
