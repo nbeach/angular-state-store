@@ -18,13 +18,13 @@ import {replace} from "../util/array.util"
 @Injectable()
 export class SearchActionReceiver extends ActionReceiver {
 
-  constructor(actions: AppActions, private store: AppStateStore, private searchService: SearchService) {
-    super(actions)
+  constructor(actions: AppActions, store: AppStateStore, private searchService: SearchService) {
+    super(actions, store)
   }
 
   @ReceivesActions([criteriaSearchAction])
-  private criteriaSearch(action: Action<CriteriaSearchAction>): Observable<Action<SearchResultAction>> {
-    const criteria = buildSearchCriteria(this.store.stateSnapshot)
+  private criteriaSearch(action: Action<CriteriaSearchAction>, state: AppState): Observable<Action<SearchResultAction>> {
+    const criteria = buildSearchCriteria(state)
 
     return this.searchService
       .search(criteria)
@@ -32,10 +32,9 @@ export class SearchActionReceiver extends ActionReceiver {
   }
 
   @ReceivesActions([querySearchAction])
-  private querySearch(action: Action<QuerySearchAction>): Observable<Action<ActionParameters>>[] {
-    const query = this.store.stateSnapshot.query
+  private querySearch(action: Action<QuerySearchAction>, state: AppState): Observable<Action<ActionParameters>>[] {
 
-    const criteria =  this.searchService.toSearchCriteria(query)
+    const criteria =  this.searchService.toSearchCriteria(state.query)
     const searchAction = criteria.pipe(map(criteria => criteriaSearchAction({ criteria })))
     const criteriaChangeAction = criteria.pipe(map(criteria => criteriaChangedAction({ criteria })))
 
@@ -43,14 +42,14 @@ export class SearchActionReceiver extends ActionReceiver {
   }
 
   @ReceivesActions([makeOptionChangeAction])
-  private searchWithNewMakeOption(action: Action<MakeOptionChangeAction>): Action<CriteriaSearchAction> {
+  private searchWithNewMakeOption(action: Action<MakeOptionChangeAction>, state: AppState): Action<CriteriaSearchAction> {
     let options
 
     if (action.selected) {
-      options = updateMakeOptions(this.store.stateSnapshot.makesOptions, action)
+      options = updateMakeOptions(state.makesOptions, action)
 
     } else {
-      options = this.store.stateSnapshot.makesOptions
+      options = state.makesOptions
         .filter(value => value.value !== action.value)
 
     }

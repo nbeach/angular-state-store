@@ -3,11 +3,13 @@ import {Action, ActionFactory, ActionParameters, Actions, isAction} from "./acti
 import {isFunction, isUndefined, negate, valuesIn} from "lodash"
 import {Injector, NgModule, Type} from "@angular/core"
 import {AppComponent} from "../component/app.component"
+import {AppState} from "../model/state/app.state"
+import {StateStore} from "./store"
 
 type ActionResult = Observable<Action<ActionParameters>> | Observable<Action<ActionParameters>>[] | Action<ActionParameters> | Action<ActionParameters> | undefined
 
 interface ActionReceiverMethod<T extends ActionParameters> {
-  (action: Action<T>): ActionResult
+  (action: Action<T>, state: AppState): ActionResult
   __eventTypes: ActionFactory<T>[]
 }
 
@@ -21,7 +23,7 @@ export function ReceivesActions(types: ActionFactory<any>[]) {
 export class ActionReceiver {
   private actionReceivers: ActionReceiverMethod<ActionParameters>[]
 
-  constructor(private actions: Actions) {
+  constructor(private actions: Actions, private store: StateStore<AppState, Action<ActionParameters>>) {
     this.actionReceivers = valuesIn(this).filter(isActionReceiver) as any
     actions.subscribe(this.dispatchActions)
   }
@@ -29,7 +31,7 @@ export class ActionReceiver {
   private dispatchActions = (action: Action<ActionParameters>) => {
     const actionsResults = this.actionReceivers
       .filter(receivesAction(action))
-      .map(receiver => receiver.call(this, action) as ActionResult)
+      .map(receiver => receiver.call(this, action, this.store.stateSnapshot) as ActionResult)
       .flat()
       .filter(negate(isUndefined))
 
